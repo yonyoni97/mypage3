@@ -92,19 +92,37 @@
         }
     </style>
     <script>
-        $(document).ready(function () {
-            let apiUrl = "https://apis.data.go.kr/1360000/AsosDalyInfoService/getWthrDataList?serviceKey=2TEeQciH%2BN7rSlFZnBw%2BcWp3OtznNlazLkMQpsfcSp7o37VHkiDGrNCcY5EydVLJqATUPGJf%2BYkKV%2FNYw6ZtIA%3D%3D&numOfRows=10&pageNo=1&dataCd=ASOS&dateCd=DAY&startDt=20230429&endDt=20230429&stnIds=108&dataType=JSON";
-            fetch(apiUrl)
-            .then(res => res.json())
-            .then(data => {
-                let seoul_temp = data['response']['body']['items']['item'][0]['avgTa'];
-                $('#temp').text(seoul_temp);
+        function getToday() {
+            now = new Date();
 
-                // let seoul_temp = data['temp']
-                // $('#temp').text(seoul_temp)
-                // $('#temp') = `<span>${seoul_temp}</span>`
-                // console.log(seoul_temp)
-            })
+            year = now.getFullYear();
+
+            month = now.getMonth() + 1;
+            month = month < 10 ? '0' + `${month}` : `${month}`;
+
+            day = now.getDate() - 1;
+            day = day < 10 ? '0' + `${day}` : `${day}`;
+
+            nowToday = `${year}${month}${day}`;
+            return nowToday;
+        }
+        console.log(getToday());
+        
+
+        $(document).ready(function () {
+            let apiUrl = "https://apis.data.go.kr/1360000/AsosDalyInfoService/getWthrDataList?serviceKey=2TEeQciH%2BN7rSlFZnBw%2BcWp3OtznNlazLkMQpsfcSp7o37VHkiDGrNCcY5EydVLJqATUPGJf%2BYkKV%2FNYw6ZtIA%3D%3D&numOfRows=10&pageNo=1&dataCd=ASOS&dateCd=DAY&startDt="+ getToday() +"&endDt="+ getToday() +"&stnIds=108&dataType=JSON";
+            console.log(apiUrl)
+            fetch(apiUrl)
+                .then(res => res.json())
+                .then(data => {
+                    let seoul_temp = data['response']['body']['items']['item'][0]['avgTa'];
+                    $('#temp').text(seoul_temp);
+
+                    // let seoul_temp = data['temp']
+                    // $('#temp').text(seoul_temp)
+                    // $('#temp') = `<span>${seoul_temp}</span>`
+                    // console.log(seoul_temp)
+                })
         })
     </script>
 </head>
@@ -112,7 +130,7 @@
 <body>
     <div class="mytitle">
         <h1>내 생애 최고의 영화들</h1>
-        <div>현재 서울의 날씨 : <span id="temp">20</span>도</div>
+        <div>현재 서울의 날씨 : <span id="temp"></span>도</div>
         <button onclick="hey()">영화 기록하기</button>
     </div>
     <div class="mypost">
